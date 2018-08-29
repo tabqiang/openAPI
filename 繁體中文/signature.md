@@ -85,7 +85,7 @@ def do_sign_request(url, data, app_key, app_secrete, method='post', headers=None
 
 
 class TestApiToken(unittest.TestCase):
-    host = "http://a.yunex.io"
+    host = "https://a.yunex.io"
     app_key = "835f4c0e1ba5d7a7b20ffad2a562f673816993239bb3d69fa306e48729917102"
     app_secrete = "1"
 
