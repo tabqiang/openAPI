@@ -1,5 +1,5 @@
 ## 簽名:
-    
+
     簽名相關參數和簽名都放請求頭部 說明如下
     -x-ts: 當前時間戳字符串(與服務器時間相差不得超過600S)
     -x-nonce: 隨機字符串
@@ -61,27 +61,26 @@ def do_sign_request(url, data, app_key, app_secrete, method='post', headers=None
     headers['Content-type'] = 'application/json'
     ts = str(int(time.time()))
     nonce = ''.join(random.sample(string.ascii_letters, 6))
-    headers['-x-ts'] = ts  # 時間戳
-    headers['-x-nonce'] = nonce  # 隨機字符串
+    headers['-x-ts'] = ts  # 时间戳
+    headers['-x-nonce'] = nonce  # 随机字符串
     headers['-x-key'] = app_key
-
+    sign_data = data or {}
     if method == "get":
         query = urlparse.urlparse(url).query
-        data = dict([(k, v[0]) for k, v in urlparse.parse_qs(query).items()])
+        sign_data = dict([(k, v[0]) for k, v in urlparse.parse_qs(query).items()])
 
-
-    sign = _build_api_sign(app_secrete, ts, nonce, data)
+    sign = _build_api_sign(app_secrete, ts, nonce, sign_data)
     headers['-x-sign'] = sign
     try:
+        # print headers
         data = json.dumps(data) if method == 'post' else data
         req = getattr(requests, method)(url=url, data=data, headers=headers, timeout=3)
-        print "result content; ", req.content  # {"data": {}, "reason": "", "ok": true}  # ok=true表示請求成功
+        print "result content; ", req.content  # {"data": {}, "reason": "", "ok": true}  # ok=true表示请求成功
         return json.loads(req.content)
     except Exception as ex:
         print "bad: ", ex
         # logging.error('[do fetch request content]: ' + repr(ex))
         return None
-
 
 
 
