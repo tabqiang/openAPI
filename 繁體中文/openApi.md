@@ -5,11 +5,11 @@
 
     | 字段名 | 數據類型 | 說明 | 取值範圍 |
     | --- | --- | --- | --- |
-    | ok | bool,int | 請求處理結果 | true, false, 1, 0 | 
+    | ok | bool,int | 請求處理結果 | true, false, 1, 0 |
     | reason | int | 請求錯誤碼 | 詳情請參考[errcode.md](./errcode.md) |
     | data | object | 響應數據返回值 | 根據具體接口而定 |
    - 示例
-   
+
         ```
         {
             "data": {},
@@ -23,13 +23,13 @@
     - 請求方式： GET
     - url： `{host}/api/v1/base/coins/list`
     - 驗證簽名： 不需要
-    - 請求參數： 
+    - 請求參數：
 
         | 字段名 | 數據類型 | 是否必須 | 說明 | 取值範圍 |
         | --- | --- | --- | --- | --- |
-        | base | int | N | 是否只獲取基礎幣種 | 1 | 
+        | base | int | N | 是否只獲取基礎幣種 | 1 |
     - data數據描述：
-    
+
         | 字段名 | 數據類型 | 說明 |
         | --- | --- | --- |
         | coin_id | string | 幣種ID |
@@ -41,7 +41,7 @@
     - 示例
         ```
         {
-        	"data": {
+            "data": {
                 "coin_id": 1,
                 "name": "USDT",
                 "symbol": "usdt",
@@ -49,8 +49,8 @@
                 "min_precision": 8,
                 "base": true
             },
-        	"reason": "",
-        	"ok": true
+            "reason": "",
+            "ok": true
         }
         ```
 
@@ -58,13 +58,13 @@
     - 請求方式： GET
     - url： `{host}/api/v1/base/coins/tradepair`
     - 驗證簽名： 不需要
-    - 請求參數： 
+    - 請求參數：
 
         | 字段名 | 數據類型 | 是否必須 | 說明 | 取值範圍 |
         | --- | --- | --- | --- | --- |
-        | basecoin | string | N | 獲取指定基礎幣種ID的交易對列表 |  | 
+        | basecoin | string | N | 獲取指定基礎幣種ID的交易對列表 |  |
     - data數據描述：
-    
+
         | 字段名 | 數據類型 | 說明 |
         | --- | --- | --- |
         | pair_id | int | 交易對ID |
@@ -78,7 +78,7 @@
     - 示例
         ```
         {
-        	"data": {
+            "data": {
                 "pair_id": 2,
                 "name": "BTC/ETH",
                 "symbol": "btc_eth",
@@ -88,23 +88,23 @@
                 "allow_order": 1,
                 "display": 1
             },
-        	"reason": "",
-        	"ok": true
+            "reason": "",
+            "ok": true
         }
         ```
-        
+
 ## 用戶資產相關
 1. 獲取幣種資產
     - 請求方式： GET
     - url： `{host}/api/v1/coin/balance`
     - 驗證簽名： 需要
-    - 請求參數： 
+    - 請求參數：
 
         | 字段名 | 數據類型 | 是否必須 | 說明 | 取值範圍 |
         | --- | --- | --- | --- | --- |
-        | cid | int | N | 獲取指定幣種資產 |  | 
+        | cid | int | N | 獲取指定幣種資產 |  |
     - data數據描述：
-    
+
         | 字段名 | 數據類型 | 說明 |
         | --- | --- | --- |
         | coin_id | int | 幣種ID |
@@ -126,29 +126,29 @@
     - 示例
         ```
         {
-        	"data": {
-        		"coin": [{
-        			"allow_withdraw": true,
-        			"usable": "913529.29070061",
-        			"max_withdraw": "100",
-        			"name": "USDT",
-        			"allow_deposit": true,
-        			"symbol": "usdt",
-        			"dep_addr": "n166L3FK2msWDaMeuAWmYaU2bhw7aVBQR6",
-        			"allow_withdraw_free_fee": true,
-        			"precision": 8,
-        			"coin_id": 1,
-        			"withdraw_fee_rate": "0.1",
-        			"withdraw_fee": "0.1",
-        			"total": "913529.29070061",
-        			"min_withdraw": "0.01",
-        			"freezed": "0",
-        			"logo": "https://s.yunex.io/static/uploads/201805/66fbeac1db5fdb8.png",
-        		}],
-        		"total_usdt": "913529.290700"
-        	},
-        	"reason": "",
-        	"ok": true
+            "data": {
+                "coin": [{
+                    "allow_withdraw": true,
+                    "usable": "913529.29070061",
+                    "max_withdraw": "100",
+                    "name": "USDT",
+                    "allow_deposit": true,
+                    "symbol": "usdt",
+                    "dep_addr": "n166L3FK2msWDaMeuAWmYaU2bhw7aVBQR6",
+                    "allow_withdraw_free_fee": true,
+                    "precision": 8,
+                    "coin_id": 1,
+                    "withdraw_fee_rate": "0.1",
+                    "withdraw_fee": "0.1",
+                    "total": "913529.29070061",
+                    "min_withdraw": "0.01",
+                    "freezed": "0",
+                    "logo": "https://s.yunex.io/static/uploads/201805/66fbeac1db5fdb8.png",
+                }],
+                "total_usdt": "913529.290700"
+            },
+            "reason": "",
+            "ok": true
         }
         ```
 
@@ -157,15 +157,15 @@
     - 請求方式： POST
     - url： `{host}/api/v1/order/buy`
     - 驗證簽名： 需要
-    - 請求參數： 
+    - 請求參數：
 
         | 字段名 | 數據類型 | 是否必須 | 說明 |
         | --- | --- | --- | --- |
-        | price | string | Y | 買入價格 | 
-        | volume | string | Y | 買入數量 | 
-        | symbol | string | Y | 交易對標識 | 
+        | price | string | Y | 買入價格 |
+        | volume | string | Y | 買入數量 |
+        | symbol | string | Y | 交易對標識 |
     - data數據描述：
-    
+
         | 字段名 | 數據類型 | 說明 |
         | --- | --- | --- |
         | order_id | string | 訂單ID |
@@ -179,20 +179,20 @@
         }
 
         ```
-        
+
 1. 下賣單
     - 請求方式： POST
     - url： `{host}/api/v1/order/sell`
     - 驗證簽名： 需要
-    - 請求參數： 
+    - 請求參數：
 
         | 字段名 | 數據類型 | 是否必須 | 說明 |
         | --- | --- | --- | --- |
-        | price | string | Y | 賣出價格 | 
-        | volume | string | Y | 賣出數量 | 
-        | symbol | string | Y | 交易對標識 | 
+        | price | string | Y | 賣出價格 |
+        | volume | string | Y | 賣出數量 |
+        | symbol | string | Y | 交易對標識 |
     - data數據描述：
-    
+
         | 字段名 | 數據類型 | 說明 |
         | --- | --- | --- |
         | order_id | string | 訂單ID |
@@ -206,19 +206,19 @@
         }
 
         ```
-        
+
 1. 申請取消委托訂單
     - 請求方式： POST
     - url： `{host}/api/v1/order/cancel`
     - 驗證簽名： 需要
-    - 請求參數： 
+    - 請求參數：
 
         | 字段名 | 數據類型 | 是否必須 | 說明 |
         | --- | --- | --- | --- |
-        | symbol | string | Y | 交易對標識 | 
-        | order_id | string | Y | 訂單ID | 
+        | symbol | string | Y | 交易對標識 |
+        | order_id | string | Y | 訂單ID |
     - data數據描述：
-    
+
         | 字段名 | 數據類型 | 說明 |
         | --- | --- | --- |
         | order_id | int | 委托訂單ID |
@@ -230,19 +230,19 @@
         }
 
         ```
-        
+
 1. 查詢訂單狀態
     - 請求方式： POST
     - url： `{host}/api/v1/order/query`
     - 驗證簽名： 需要
-    - 請求參數： 
+    - 請求參數：
 
         | 字段名 | 數據類型 | 是否必須 | 說明 |
         | --- | --- | --- | --- |
-        | symbol | string | Y | 交易對標識 | 
-        | order_id | string | Y | 訂單ID | 
+        | symbol | string | Y | 交易對標識 |
+        | order_id | string | Y | 訂單ID |
     - data數據描述：
-    
+
         | 字段名 | 數據類型 | 說明 |
         | --- | --- | --- |
         | pair_id | int | 交易對ID |
@@ -271,21 +271,21 @@
             "ok": 1
         }
         ```
-        
+
 1. 查詢未結束成交訂單
     - 請求方式： POST
     - url： `{host}/api/v1/order/unfinished`
     - 驗證簽名： 需要
-    - 請求參數： 
+    - 請求參數：
 
         | 字段名 | 數據類型 | 是否必須 | 說明 |
         | --- | --- | --- | --- |
-        | symbol | string | Y | 交易對標識,傳空字符串則查詢所有交易對 | 
-        | direction | int | N | 查詢方向,1:正序，2:倒序 | 
-        | start | int | N | 分頁起始ID | 
-        | count | int | N | 每頁數量 | 
+        | symbol | string | Y | 交易對標識,傳空字符串則查詢所有交易對 |
+        | direction | int | N | 查詢方向,1:正序，2:倒序 |
+        | start | int | N | 分頁起始ID |
+        | count | int | N | 每頁數量 |
     - data數據描述：
-    
+
         | 字段名 | 數據類型 | 說明 |
         | --- | --- | --- |
         | pair_id | int | 交易對ID |
@@ -301,42 +301,42 @@
     - 示例
         ```
         {
-        	"data": {
-        		"count": 1,
-        		"list": [{
-        			"pair_id": 3,
-        			"order_id": "B18072319025470778740386",
-        			"user_id": 80,
-        			"type": 2,
-        			"timestamp": 1532343774707775786,
-        			"price": "1.00000000",
-        			"volume": "1.00000",
-        			"trade_volume": "0.00000",
-        			"amount": "1.00000000",
-        			"status": 1,
-        			"id": 1406365
-        		}]
-        	},
-        	"ok": 1
+            "data": {
+                "count": 1,
+                "list": [{
+                    "pair_id": 3,
+                    "order_id": "B18072319025470778740386",
+                    "user_id": 80,
+                    "type": 2,
+                    "timestamp": 1532343774707775786,
+                    "price": "1.00000000",
+                    "volume": "1.00000",
+                    "trade_volume": "0.00000",
+                    "amount": "1.00000000",
+                    "status": 1,
+                    "id": 1406365
+                }]
+            },
+            "ok": 1
         }
         ```
-        
+
 1. 分月查詢成交記錄
     - 請求方式： POST
     - url： `{host}/api/v1/order/trade/history`
     - 驗證簽名： 需要
-    - 請求參數： 
+    - 請求參數：
 
         | 字段名 | 數據類型 | 是否必須 | 說明 | 取值範圍 |
         | --- | --- | --- | --- | --- |
-        | symbol | string | Y | 交易對標識 |  | 
-        | direction | int | N | 查詢方向,1:正序，2:倒序 |  | 
+        | symbol | string | Y | 交易對標識 |  |
+        | direction | int | N | 查詢方向,1:正序，2:倒序 |  |
         | start | int | N | 分頁起始ID |  |
         | count | int | N | 每頁數量 |  |
         | status | int | Y | 記錄狀態 | 0 |
         | yearmonth | string | Y | 查詢年月 | "yyyymm" |
     - data數據描述：
-    
+
         | 字段名 | 數據類型 | 說明 |
         | --- | --- | --- |
         | count | int | 總數量 |
@@ -373,18 +373,18 @@
 1. 查詢指定交易對成交記錄
     - 請求方式： POST
     - url： `{host}/api/v1/order/trade/recent`
-    - 驗證簽名： 需要
-    - 請求參數： 
+    - 驗證簽名： 不需要
+    - 請求參數：
 
         | 字段名 | 數據類型 | 是否必須 | 說明 | 取值範圍 |
         | --- | --- | --- | --- | --- |
-        | symbol | string | Y | 交易對標識 |  | 
-        | direction | int | N | 查詢方向,1:正序，2:倒序 |  | 
+        | symbol | string | Y | 交易對標識 |  |
+        | direction | int | N | 查詢方向,1:正序，2:倒序 |  |
         | start | int | N | 分頁起始ID |  |
         | count | int | N | 每頁數量 |  |
         | status | int | Y | 記錄狀態 | 0 |
     - data數據描述：
-    
+
         | 字段名 | 數據類型 | 說明 |
         | --- | --- | --- |
         | pair_id | int | 交易對ID |
@@ -397,34 +397,34 @@
     - 示例
         ```
         {
-        	"data": {
-        		"list": [{
-        			"pair_id": 3,
-        			"trade_id": "T180823780b873599575b0c3",
-        			"trade_by": 2,
-        			"timestamp": 1535006629598808064,
-        			"price": "3717.6633",
-        			"volume": "0.0001",
-        			"id": 4317
-        		}]
-        	},
-        	"ok": 1
+            "data": {
+                "list": [{
+                    "pair_id": 3,
+                    "trade_id": "T180823780b873599575b0c3",
+                    "trade_by": 2,
+                    "timestamp": 1535006629598808064,
+                    "price": "3717.6633",
+                    "volume": "0.0001",
+                    "id": 4317
+                }]
+            },
+            "ok": 1
         }
         ```
 
 ## 行情相關
 1. 查詢盤口
     - 請求方式： GET
-    - url： `{host}/api/v1/market/depth`
+    - url： `{host}/api/market/depth`
     - 驗證簽名： 不需要
-    - 請求參數： 
+    - 請求參數：
 
         | 字段名 | 數據類型 | 是否必須 | 說明 | 取值範圍 |
         | --- | --- | --- | --- | --- |
         | symbol | string | Y | 交易對標識 |  |
         | level | int | N | 盤口條數 | 1-15,默認5 |
     - data數據描述：
-    
+
         | 字段名 | 數據類型 | 說明 |
         | --- | --- | --- |
         | asks | object | 賣盤盤口,數組元素下標對應值描述,0:價格,1:數量 |
@@ -432,25 +432,25 @@
     - 示例
         ```
         {
-        	"data": {
-        		"asks": [
-        			["8085.4879", "0.0123"],
-        			["8087.4032", "0.0133"]
-        		],
-        		"bids": [
-        			["7971.112", "0.0254"],
-        			["7967.8713", "0.0161"]
-        		]
-        	},
-        	"ok": 1
+            "data": {
+                "asks": [
+                    ["8085.4879", "0.0123"],
+                    ["8087.4032", "0.0133"]
+                ],
+                "bids": [
+                    ["7971.112", "0.0254"],
+                    ["7967.8713", "0.0161"]
+                ]
+            },
+            "ok": 1
         }
         ```
-        
+
 1. 查詢K線
     - 請求方式： GET
-    - url： `{host}/api/v1/market/trade/kline`
+    - url： `{host}/api/market/trade/kline`
     - 驗證簽名： 不需要
-    - 請求參數： 
+    - 請求參數：
 
         | 字段名 | 數據類型 | 是否必須 | 說明 | 取值範圍 |
         | --- | --- | --- | --- | --- |
@@ -459,7 +459,7 @@
         | start | int | N | 開始時間戳 | 默認當前時間戳 |
         | count | int | Y | 每頁數量 | 2-300 |
     - data數據描述：
-    
+
         | 字段名 | 數據類型 | 說明 |
         | --- | --- | --- |
         | ts | int | 服務器當前時間,秒級別 |
@@ -468,29 +468,29 @@
     - 示例
         ```
         {
-        	"data": [{
-        		"ts": 1532403420,
-        		"v": ["8071.2796", "8071.2796", "8071.2796", "8071.2796", "0", "0"]
-        	}, {
-        		"ts": 1532403480,
-        		"v": ["8071.2796", "8071.2796", "8071.2796", "8071.2796", "0", "0"]
-        	}],
-        	"ok": 1,
-        	"ts": 1532403534
+            "data": [{
+                "ts": 1532403420,
+                "v": ["8071.2796", "8071.2796", "8071.2796", "8071.2796", "0", "0"]
+            }, {
+                "ts": 1532403480,
+                "v": ["8071.2796", "8071.2796", "8071.2796", "8071.2796", "0", "0"]
+            }],
+            "ok": 1,
+            "ts": 1532403534
         }
         ```
-        
+
 1. 市場行情
     - 請求方式： GET
-    - url： `{host}/api/v1/market/trade/info`
+    - url： `{host}/api/market/trade/info`
     - 驗證簽名： 不需要
-    - 請求參數： 
+    - 請求參數：
 
         | 字段名 | 數據類型 | 是否必須 | 說明 | 取值範圍 |
         | --- | --- | --- | --- | --- |
         | symbol | string | Y | 交易對標識 |  |
     - data數據描述：
-    
+
         | 字段名 | 數據類型 | 說明 |
         | --- | --- | --- |
         | close_price | string | 收盤價 |
@@ -505,18 +505,17 @@
     - 示例
         ```
         {
-        	"data": {
-        		"amount": "0",
-        		"close_price": "0",
-        		"coin_pair": "kt_usdt",
-        		"cur_price": "0.1499",
-        		"max_price": "0.1499",
-        		"min_price": "0.1499",
-        		"open_price": "0",
-        		"rate": "0",
-        		"volume": "0"
-        	},
-        	"ok": 1
+            "data": {
+                "amount": "0",
+                "close_price": "0",
+                "coin_pair": "kt_usdt",
+                "cur_price": "0.1499",
+                "max_price": "0.1499",
+                "min_price": "0.1499",
+                "open_price": "0",
+                "rate": "0",
+                "volume": "0"
+            },
+            "ok": 1
         }
         ```
-        
