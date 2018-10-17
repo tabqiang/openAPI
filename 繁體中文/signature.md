@@ -65,9 +65,9 @@ def do_sign_request(url, data, app_key, app_secrete, method='post', headers=None
     headers['-x-nonce'] = nonce  # 随机字符串
     headers['-x-key'] = app_key
     sign_data = data or {}
-    if method == "get":
+    if method == "get" and not data:
         query = urlparse.urlparse(url).query
-        sign_data = dict([(k, v[0]) for k, v in urlparse.parse_qs(query).items()])
+        data = dict([(k, v[0]) for k, v in urlparse.parse_qs(query, keep_blank_values=1).items()])
 
     sign = _build_api_sign(app_secrete, ts, nonce, sign_data)
     headers['-x-sign'] = sign
