@@ -36,46 +36,33 @@ import string
 import requests
 import urllib
 import urlparse
-import unittest
-
-
-
-def _build_api_sign(secret, ts, nonce, req_data):
-    for k in req_data:
-        value = req_data[k]
-        if isinstance(value, unicode):
-            value = value.encode('utf8')
-        else:
-            value = str(value)
-        req_data[k] = urllib.quote_plus(value)  # a a -> a+a
-    d = sorted(req_data.iteritems(), key=lambda x: x[0])
-    req_str = "&".join(["%s=%s" % (x[0], x[1]) for x in d])
-    sign_str = "{req_str}{ts}{nonce}{secret}".format(req_str=req_str, ts=ts, nonce=nonce, secret=secret)
-    return hashlib.sha256(sign_str).hexdigest()
 
 
 def do_sign_request(url, data, app_key, app_secrete, method='post', headers=None):
+    method = method.lower()
     assert method == 'get' or method == 'post'
     assert isinstance(data, dict)
     headers = headers or {}
     headers['Content-type'] = 'application/json'
     ts = str(int(time.time()))
     nonce = ''.join(random.sample(string.ascii_letters, 6))
-    headers['-x-ts'] = ts  # 时间戳
-    headers['-x-nonce'] = nonce  # 随机字符串
+    headers['-x-ts'] = ts  # 時間戳
+    headers['-x-nonce'] = nonce  # 隨機字符串
     headers['-x-key'] = app_key
-    sign_data = data or {}
-    if method == "get" and not data:
-        query = urlparse.urlparse(url).query
-        data = dict([(k, v[0]) for k, v in urlparse.parse_qs(query, keep_blank_values=1).items()])
 
-    sign = _build_api_sign(app_secrete, ts, nonce, sign_data)
+    if method == "get":
+        query_str = urlparse.urlparse(url).query if not data else \
+            urllib.urlencode({k: (v.encode("utf8") if isinstance(v, unicode) else v) for k, v in data.items()})
+    else:
+        query_str = json.dumps(data)
+    sign_str = "{req_str}{ts}{nonce}{secret}".format(req_str=query_str, ts=ts, nonce=nonce, secret=app_secrete)
+    sign = hashlib.sha256(sign_str).hexdigest()
+    print "--sign_str: ", sign_str, "  \nsign=", sign
     headers['-x-sign'] = sign
     try:
-        # print headers
         data = json.dumps(data) if method == 'post' else data
         req = getattr(requests, method)(url=url, data=data, headers=headers, timeout=3)
-        print "result content; ", req.content  # {"data": {}, "reason": "", "ok": true}  # ok=true表示请求成功
+        print "result content; ", req.content  # {"data": {}, "reason": "", "ok": true}  # ok=true表示請求成功
         return json.loads(req.content)
     except Exception as ex:
         print "bad: ", ex
@@ -83,135 +70,22 @@ def do_sign_request(url, data, app_key, app_secrete, method='post', headers=None
         return None
 
 
-
-class TestApiToken(unittest.TestCase):
-    host = "https://a.yunex.io"
-    app_key = "835f4c0e1ba5d7a7b20ffad2a562f673816993239bb3d69fa306e48729917102"
-    app_secrete = "1"
-
-    app_key_readonly= "c86e420a142ba381aafd5cbbf99323138e84a35e25cc1bd9b5411ea8062f57ee"
-    app_secrete_readonly = "2"
-
-
-    def test_query_order(self):
-        res = do_sign_request(
-                url="%s/api/v1/order/query?symbol=btc_usdt&order_id=B18072612051288996137086" % self.host,
-                data={},
-                app_key=self.app_key,
-                app_secrete=self.app_secrete,
-                method="get"
-            )
-        self.assertEqual(res['ok'], 1)
-
-        res = do_sign_request(
-            url="%s/api/v1/order/query?symbol=btc_usdt&order_id=B18072612051288996137086" % self.host,
-            data={},
-            app_key=self.app_key_readonly,
-            app_secrete=self.app_secrete_readonly,
-            method="get"
-        )
-        self.assertEqual(res['ok'], 1)
-
-    def test_buy_order(self):
-        res = do_sign_request(
-                url="%s/api/v1/order/buy" % self.host,
-                data={
-                    "price": "3.25",
-                    "volume": "1",
-                    "symbol": "yun_usdt"
-                },
-                app_key=self.app_key,
-                app_secrete=self.app_secrete,
-                method="post"
-            )
-        self.assertEqual(res['ok'], 1)
-
-        res = do_sign_request(
-                url="%s/api/v1/order/buy" % self.host,
-                data={
-                    "price": "3.25",
-                    "volume": "1",
-                    "symbol": "yun_usdt"
-                },
-                app_key=self.app_key_readonly,
-                app_secrete=self.app_secrete_readonly,
-                method="post"
-            )
-        self.assertEqual(res['ok'], 0)
-
-    def test_sell_order(self):
-        res = do_sign_request(
-                url="%s/api/v1/order/sell" % self.host,
-                data={
-                    "price": "4.25",
-                    "volume": "1",
-                    "symbol": "yun_usdt"
-                },
-                app_key=self.app_key,
-                app_secrete=self.app_secrete,
-                method="post"
-            )
-        self.assertEqual(res['ok'], 1)
-
-        res = do_sign_request(
-            url="%s/api/v1/order/sell" % self.host,
-            data={
-                "price": "4.25",
-                "volume": "1",
-                "symbol": "yun_usdt"
-            },
-            app_key=self.app_key_readonly,
-            app_secrete=self.app_secrete_readonly,
-            method="post"
-        )
-        self.assertEqual(res['ok'], 0)
-
-    def test_cancel_order(self):
-        res = do_sign_request(
-            url="%s/api/v1/order/cancel" % self.host,
-            data={
-                "order_id": "",
-                "symbol": "yun_usdt"
-            },
-            app_key=self.app_key,
-            app_secrete=self.app_secrete,
-            method="post"
-        )
-        self.assertEqual(res['ok'], 1)
-
-        res = do_sign_request(
-            url="%s/api/v1/order/cancel" % self.host,
-            data={
-                "order_id": "",
-                "symbol": "yun_usdt"
-            },
-            app_key=self.app_key_readonly,
-            app_secrete=self.app_secrete_readonly,
-            method="post"
-        )
-        self.assertEqual(res['ok'], 0)
-
-
-    def test_unfinished_order(self):
-        res = do_sign_request(
-                url="%s/api/v1/order/unfinished?symbol=yun_usdt&direction=1&start=1&count=1&more=1" % self.host,
-                data={},
-                app_key=self.app_key,
-                app_secrete=self.app_secrete,
-                method="get"
-            )
-        self.assertEqual(res['ok'], 1)
-
-        res = do_sign_request(
-            url="%s/api/v1/order/unfinished?symbol=yun_usdt&direction=1&start=1&count=1&more=1" % self.host,
-            data={},
-            app_key=self.app_key_readonly,
-            app_secrete=self.app_secrete_readonly,
-            method="get"
-        )
-        self.assertEqual(res['ok'], 1)
-
-
 if __name__ == '__main__':
-    unittest.main()
+    do_sign_request(
+        url="http://a.yunex.io/api/coin/bonus/transfer/",
+        data={
+            "bonus": [
+                {
+                     "to_uid": 16,
+                     "symbol": "kt",
+                     "amount": "1.13",
+                     "date": "2018-10-16",
+                     "order_id": "B20181016"
+                }
+            ]
+        },
+        app_key="91991e4def97bdd517e678ccd5c0ac856724ab7f6f3e9de14caa8325df51cccf",
+        app_secrete="W8ZLD2x4N11PeCpZt2mCDtTSe8KpQtS6FkSgtS1qwnrWTK3QPGIDfpYEW061UlEe",
+        method="post",
+    )
 ```
