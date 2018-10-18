@@ -57,7 +57,11 @@ def do_sign_request(url, data, app_key, app_secrete, method='post', headers=None
                                                  for k, v in data.items()})
             url = url.split("?")[0] + "?" + query_str
     else:
-        query_str = json.dumps(data)
+        # post時候需要將url中的query加入到簽名計算
+        url_query_str = urlparse.urlparse(url).query
+        body = json.dumps(data)
+        query_str = "%s%s" % (url_query_str, body)
+
     sign_str = "{req_str}{ts}{nonce}{secret}".format(req_str=query_str, ts=ts, nonce=nonce, secret=app_secrete)
     sign = hashlib.sha256(sign_str).hexdigest()
     print "--sign_str: ", sign_str, "  \nsign=", sign
